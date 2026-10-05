@@ -31,7 +31,8 @@ export function EnquiryForm() {
   // Deferred loading: near the viewport, or as soon as a CTA heads here.
   useEffect(() => {
     const el = wrap.current!;
-    const load = () => setSrc(s => s ?? CONFIG.formSrc);
+    // No form URL configured (build without VITE_SPLUS_FORM_URL): show the WhatsApp/phone fallback at once.
+    const load = () => { if (!CONFIG.formSrc) { setDown(true); return; } setSrc(s => s ?? CONFIG.formSrc); };
     window.addEventListener(LOAD_FORM_EVENT, load);
     let io: IntersectionObserver | undefined;
     if ('IntersectionObserver' in window) {
