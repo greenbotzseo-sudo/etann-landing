@@ -6,6 +6,7 @@ import { Cta, OutLink, WaLink } from './Links';
 import { Logo } from './Top';
 import { Marquee } from './Marquee';
 import { Spot } from './Illustrations';
+import { ReviewsWidget } from './ReviewsWidget';
 import { useRating, useReviews, type LiveReview } from '../lib/reviews';
 
 export function Funding() {
@@ -111,7 +112,9 @@ export function Testimonials() {
             <span className="g-count">{g.count ? `${g.count.toLocaleString('en-SG')} Google reviews` : 'Google reviews'}<Icon name="ext" /></span>
           </a>
         </div>
-        {live
+        {!live && CONFIG.reviewsWidget
+          ? <ReviewsWidget src={CONFIG.reviewsWidget} />
+          : live
           ? <Marquee label="Google reviews of ETANN" speed={35} className="t-mq">
               {g.reviews.map((r, i) => <GoogleReview key={`${r.author}-${i}`} r={r} />)}
             </Marquee>

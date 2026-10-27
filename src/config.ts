@@ -30,6 +30,10 @@ export const CONFIG = {
     placeId: import.meta.env.VITE_GOOGLE_PLACE_ID || '',
   },
 
+  // Google-reviews widget (Trustindex or Elfsight), used when Google's own API sends no review text.
+  // Trustindex: the loader.js URL from its embed code. Elfsight: "elfsight:<app id>".
+  reviewsWidget: import.meta.env.VITE_REVIEWS_WIDGET || '',
+
   tracking: {
     gtm: import.meta.env.VITE_GTM_ID || '',
     gads: import.meta.env.VITE_GADS_ID || '',

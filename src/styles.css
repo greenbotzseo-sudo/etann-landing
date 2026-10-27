@@ -678,3 +678,4 @@ h3{font-weight:700}
 /* Logo sits in the top-left corner of the hero */
 .hero{padding-top:18px}
 @media (min-width:900px){.hero{padding-top:26px}}
+.rw{min-height:260px}
