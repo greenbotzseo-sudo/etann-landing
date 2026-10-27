@@ -35,7 +35,6 @@ export const CONFIG = {
   reviewsWidget: import.meta.env.VITE_REVIEWS_WIDGET || '',
 
   tracking: {
-    gtm: import.meta.env.VITE_GTM_ID || '',
     gads: import.meta.env.VITE_GADS_ID || '',
     gadsLeadLabel: import.meta.env.VITE_GADS_LEAD_LABEL || '',
     gadsWhatsAppLabel: import.meta.env.VITE_GADS_WHATSAPP_LABEL || '',
@@ -43,13 +42,12 @@ export const CONFIG = {
   },
 } as const;
 
-/** Link to a page on the main ETANN site, tagged so its analytics can see traffic from this page. */
-export function mainSite(path: string, campaign = 'lead_lp') {
-  const u = new URL(path, CONFIG.mainSite);
-  u.searchParams.set('utm_source', 'lead.etannsg.com');
-  u.searchParams.set('utm_medium', 'referral');
-  u.searchParams.set('utm_campaign', campaign);
-  return u.toString();
+/**
+ * Link to a page on the main ETANN site. No UTM tags: both sites report into one GA4 property (via GTM-MX932TBT),
+ * so UTMs here would overwrite the visitor's real ad source.
+ */
+export function mainSite(path: string) {
+  return new URL(path, CONFIG.mainSite).toString();
 }
 
-export const courseUrl = (slug: string) => mainSite(`/course-detail/${slug}/`, 'course_link');
+export const courseUrl = (slug: string) => mainSite(`/course-detail/${slug}/`);

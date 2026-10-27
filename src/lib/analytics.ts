@@ -40,6 +40,12 @@ export function initAnalytics() {
 
   loadTags();
   track('lp_page_view', { landing_page: location.pathname });
+
+  // Every tel: link on the page (contact list, chat widget, form fallback) reports phone_click.
+  document.addEventListener('click', e => {
+    const a = (e.target as Element | null)?.closest?.('a[href^="tel:"]');
+    if (a) track('phone_click', { location: a.getAttribute('data-cta') || 'contact' });
+  });
 }
 
 export function track(event: string, params: Record<string, unknown> = {}) {
@@ -56,19 +62,22 @@ export function track(event: string, params: Record<string, unknown> = {}) {
 function adsHook(event: string, p: Record<string, unknown>) {
   const t = CONFIG.tracking;
   if (t.gads && window.gtag) {
-    if (event === 'form_success' && t.gadsLeadLabel) window.gtag('event', 'conversion', { send_to: `${t.gads}/${t.gadsLeadLabel}` });
+    if (event === 'generate_lead' && t.gadsLeadLabel) window.gtag('event', 'conversion', { send_to: `${t.gads}/${t.gadsLeadLabel}` });
     if (event === 'whatsapp_click' && t.gadsWhatsAppLabel) window.gtag('event', 'conversion', { send_to: `${t.gads}/${t.gadsWhatsAppLabel}` });
   }
   if (t.metaPixel && window.fbq) {
-    if (event === 'whatsapp_click') window.fbq('track', 'Contact', { content_name: p.course || '' });
-    if (event === 'form_success') window.fbq('track', 'Lead', { content_name: p.course || '' });
+    if (event === 'whatsapp_click' || event === 'phone_click') window.fbq('track', 'Contact', { content_name: p.course || '' });
+    if (event === 'generate_lead') window.fbq('track', 'Lead', { content_name: p.course || '' });
   }
 }
 
-/** Tags load on first interaction or 3s after load, so they never compete with first paint. */
+/**
+ * Optional direct Google Ads / Meta tags (only if not set up in GTM, otherwise conversions double count).
+ * GTM itself is in index.html. These load on first interaction or 3s after load.
+ */
 function loadTags() {
   const t = CONFIG.tracking;
-  if (!t.gtm && !t.gads && !t.metaPixel) return;
+  if (!t.gads && !t.metaPixel) return;
   const dl = window.dataLayer;
   if (t.gads) {
     window.gtag = function () { dl.push(arguments); };
@@ -84,7 +93,6 @@ function loadTags() {
   const add = (src: string) => { const s = document.createElement('script'); s.async = true; s.src = src; document.head.appendChild(s); };
   const go = () => {
     if (done) return; done = true;
-    if (t.gtm) { dl.push({ 'gtm.start': Date.now(), event: 'gtm.js' }); add(`https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(t.gtm)}`); }
     if (t.gads) add(`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(t.gads)}`);
     if (t.metaPixel) add('https://connect.facebook.net/en_US/fbevents.js');
   };

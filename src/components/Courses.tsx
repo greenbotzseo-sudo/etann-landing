@@ -45,7 +45,7 @@ export function Courses() {
             <h2 id="co-h">WSQ security courses</h2>
             <p className="lead">Full course fees are before SSG funding. What you pay depends on your age, citizenship and the funding you qualify for.</p>
           </div>
-          <OutLink href={mainSite('/all-courses/', 'all_courses')} id="all_courses" className="btn btn-outline">All courses<Icon name="ext" /></OutLink>
+          <OutLink href={mainSite('/all-courses/')} id="all_courses" className="btn btn-outline">All courses<Icon name="ext" /></OutLink>
         </div>
 
         <div className="ct-tabs" role="tablist" aria-label="Course categories">

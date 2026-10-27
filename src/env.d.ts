@@ -5,7 +5,6 @@ declare const __BUILD_TS__: number;
 
 interface ImportMetaEnv {
   readonly VITE_SPLUS_FORM_URL: string;
-  readonly VITE_GTM_ID?: string;
   readonly VITE_GADS_ID?: string;
   readonly VITE_GADS_LEAD_LABEL?: string;
   readonly VITE_GADS_WHATSAPP_LABEL?: string;

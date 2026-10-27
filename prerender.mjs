@@ -6,13 +6,25 @@ import { readFileSync, writeFileSync, rmSync, readdirSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';
 
-const { render } = await import(pathToFileURL(resolve('dist-ssr/entry-server.js')).href);
+const { render, schema, llmsTxt, SITE } = await import(pathToFileURL(resolve('dist-ssr/entry-server.js')).href);
 const file = resolve('dist/index.html');
 const html = readFileSync(file, 'utf8');
 if (!html.includes('<!--app-html-->')) throw new Error('Placeholder <!--app-html--> not found in dist/index.html');
 
-const out = html.replace('<!--app-html-->', render());
+if (!html.includes('<!--schema-->')) throw new Error('Placeholder <!--schema--> not found in dist/index.html');
+const ld = JSON.stringify(schema()).replace(/</g, '\\u003c');
+const out = html
+  .replace('<!--app-html-->', render())
+  .replace('<!--schema-->', `<script type="application/ld+json">${ld}</script>`);
 writeFileSync(file, out);
+
+// SEO / GEO files, generated from the same data as the page
+writeFileSync(resolve('dist/llms.txt'), llmsTxt());
+writeFileSync(resolve('dist/sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url><loc>${SITE}</loc><lastmod>${new Date().toISOString().slice(0, 10)}</lastmod><image:image><image:loc>${SITE}img/og.jpg</image:loc></image:image></url>
+</urlset>
+`);
 rmSync(resolve('dist-ssr'), { recursive: true, force: true });
 
 // Guard: the SPlus form URL must not be baked into the HTML (it is set in the browser only).

@@ -96,17 +96,24 @@ export function EnquiryForm() {
         track('form_interaction', { role: guideRef.current.role || '(none)', course: guideRef.current.pick || '(none)' });
       }
     }, 0);
+    let leadSent = false;
     // Not sent by the SPlus form today — ready for when SPlus adds it (see README).
     const onMessage = (e: MessageEvent) => {
-      if (e.source !== f.contentWindow || !CONFIG.splusOrigin.test(e.origin)) return;
+      if (e.source !== f.contentWindow) return;
       const m = e.data;
+      // SPlus redirecting its iframe to /thank-you.html (same origin as this page) after a submit
+      if (e.origin === location.origin && m?.source === 'etann-thank-you' && m.type === 'form_success') {
+        if (!leadSent) { leadSent = true; setOpen(true); track('form_submission', { course: '(thank-you page)' }); track('generate_lead', { course: '(thank-you page)', form: 'splus' }); }
+        return;
+      }
+      if (!CONFIG.splusOrigin.test(e.origin)) return;
       if (!m || m.source !== 'splus-lead-form' || typeof m.type !== 'string') return;
       if (m.type === 'resize' && m.height > 200 && m.height < 3000) { setAutoHeight(Math.ceil(m.height)); return; }
       if (['form_started', 'form_submitted', 'form_success', 'form_error'].includes(m.type)) {
         setOpen(true);
         const course = String(m.course || '').slice(0, 80);
         track(m.type, { course });
-        if (m.type === 'form_success') track('form_submission', { course });
+        if (m.type === 'form_success' && !leadSent) { leadSent = true; track('form_submission', { course }); track('generate_lead', { course, form: 'splus' }); }
       }
     };
     window.addEventListener('blur', onBlur);

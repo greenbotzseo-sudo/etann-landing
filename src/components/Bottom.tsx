@@ -20,7 +20,7 @@ export function Funding() {
           <p className="fund-note">Funding is subject to SSG and scheme eligibility rules at the time of enrolment. Employer-sponsored learners may also be eligible for Absentee Payroll. Our team works out your actual amount before you commit.</p>
           <div className="fund-cta">
             <Cta to="#form" id="funding" className="btn btn-primary">Check My Funding<Icon name="arrow" /></Cta>
-            <OutLink href={mainSite('/course-fees-and-funding/', 'funding')} id="funding_page" className="text-link">Fees &amp; funding guide<Icon name="ext" /></OutLink>
+            <OutLink href={mainSite('/course-fees-and-funding/')} id="funding_page" className="text-link">Fees &amp; funding guide<Icon name="ext" /></OutLink>
           </div>
         </div>
         <div className="schemes reveal">
@@ -168,7 +168,7 @@ export function Faq() {
               <summary>{f.q}</summary>
               <div className="a">
                 <p>{f.a}</p>
-                {f.link && <p><OutLink href={mainSite(f.link.path, 'faq')} id={`faq_${f.link.path.split('/').filter(Boolean).pop()}`} className="text-link">{f.link.label}<Icon name="ext" /></OutLink></p>}
+                {f.link && <p><OutLink href={mainSite(f.link.path)} id={`faq_${f.link.path.split('/').filter(Boolean).pop()}`} className="text-link">{f.link.label}<Icon name="ext" /></OutLink></p>}
               </div>
             </details>
           ))}
@@ -235,7 +235,7 @@ export function Footer() {
         <Logo height={56} />
         <p>ETANN Consultants Pte Ltd · <b>UEN: {CONFIG.uen}</b> · SSG-approved training provider</p>
         <p className="foot-links">
-          <OutLink href={mainSite('/', 'footer')} id="footer_main">etannacademy.com</OutLink> ·{' '}
+          <OutLink href={mainSite('/')} id="footer_main">etannacademy.com</OutLink> ·{' '}
           <a href={CONFIG.privacyUrl} target="_blank" rel="noopener">Privacy Policy</a> ·{' '}
           <a href={CONFIG.termsUrl} target="_blank" rel="noopener">Terms &amp; Conditions</a> · © {new Date(CONFIG.deadline).getFullYear()} ETANN Academy
         </p>

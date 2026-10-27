@@ -128,3 +128,12 @@ Until then, form heights are fixed per breakpoint (the `.ff` rules in `styles.cs
 - The hero strip under the CTAs shows the live Google rating with 4 real reviewers' Google profile photos. Before reviews load, it shows "SSG-approved WSQ training provider" at the same height, so there's no layout shift.
 - The contact section has a Google map (keyless embed, lazy-loaded) and a "Get directions" link to ETANN's exact Google listing.
 - "3,000+ officers trained" is carried over from ETANN's current page, like the testimonials that turned out to be fake (now removed). Confirm it against ETANN's training records, or remove it from `STATS` in `src/data/content.ts`.
+
+## Tracking, SEO and GEO
+
+- **GTM `GTM-MX932TBT`** (shared with etannacademy.com) is hard-coded in `index.html`. GA4 `G-S4V8JQX4V0`, Google Ads and Meta Pixel tags are set up inside GTM, not in the page. Leave the `VITE_GADS_*` / `VITE_META_PIXEL_ID` env vars empty unless a tag is *not* in GTM, or conversions double count.
+- **dataLayer events for GTM triggers** (Custom Event): `whatsapp_click`, `phone_click` (any `tel:` link), `generate_lead` (form success), plus `form_interaction`, `iframe_viewed`, `cta_click`, `scroll_depth`, `outbound_click`. Every event carries `utm_source`, `utm_medium`, `utm_campaign`, `lp_variant` and `device`.
+- **`generate_lead`** fires when SPlus posts `form_success`, or when SPlus redirects its iframe to `https://lead.etannacademy.com/thank-you.html` after a submit (ask SPlus to set this as the success redirect).
+- **Links to etannacademy.com carry no UTMs** (one GA4 property; UTMs would overwrite the ad source).
+- **SEO**: indexable, canonical `https://lead.etannacademy.com/`, geo meta, Open Graph/Twitter tags, `robots.txt`, `sitemap.xml`. JSON-LD (organisation, web page, 12 courses with fees, FAQ) is generated at build time in `src/seo.ts` from the same data as the page.
+- **GEO** (AI answer engines): `llms.txt` generated from the course, fee and FAQ data; AI crawlers allowed in `robots.txt`.
