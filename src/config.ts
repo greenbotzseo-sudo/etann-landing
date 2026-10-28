@@ -1,9 +1,7 @@
 /** Site-wide settings. Secrets and tracking IDs come from .env (see .env.example). */
 export const CONFIG = {
-  // SPlus enquiry form (iframe). Integration credential — read from .env, used only as the iframe src.
-  formSrc: import.meta.env.VITE_SPLUS_FORM_URL as string,
-  // postMessage events are accepted only from this origin pattern.
-  splusOrigin: /^https:\/\/([a-z0-9-]+\.)*splus\.one$/,
+  // SPlus endpoint the enquiry form posts to (same one the SPlus LeadCourseForm uses).
+  leadApi: import.meta.env.VITE_SPLUS_LEAD_API || 'https://api.splus.one/web/v1/jobapplication/SaveLeadCourseForm',
 
   deadline: '2026-12-31T23:59:59+08:00',
 

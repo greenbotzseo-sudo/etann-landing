@@ -132,8 +132,17 @@ Until then, form heights are fixed per breakpoint (the `.ff` rules in `styles.cs
 ## Tracking, SEO and GEO
 
 - **GTM `GTM-MX932TBT`** (shared with etannacademy.com) is hard-coded in `index.html`. GA4 `G-S4V8JQX4V0`, Google Ads and Meta Pixel tags are set up inside GTM, not in the page. Leave the `VITE_GADS_*` / `VITE_META_PIXEL_ID` env vars empty unless a tag is *not* in GTM, or conversions double count.
-- **dataLayer events for GTM triggers** (Custom Event): `whatsapp_click`, `phone_click` (any `tel:` link), `generate_lead` (form success), plus `form_interaction`, `iframe_viewed`, `cta_click`, `scroll_depth`, `outbound_click`. Every event carries `utm_source`, `utm_medium`, `utm_campaign`, `lp_variant` and `device`.
-- **`generate_lead`** fires when SPlus posts `form_success`, or when SPlus redirects its iframe to `https://lead.etannacademy.com/thank-you.html` after a submit (ask SPlus to set this as the success redirect).
+- **dataLayer events for GTM triggers** (Custom Event): `whatsapp_click`, `phone_click` (any `tel:` link), `generate_lead` (form success), plus `form_viewed`, `form_interaction`, `form_step`, `form_error`, `cta_click`, `scroll_depth`, `outbound_click`. Every event carries `utm_source`, `utm_medium`, `utm_campaign`, `lp_variant` and `device`.
+- **`generate_lead`** fires when the enquiry form's submission is confirmed by SPlus, with `course` and `situation` (obse | prsf | new | supervisor | unsure).
 - **Links to etannacademy.com carry no UTMs** (one GA4 property; UTMs would overwrite the ad source).
 - **SEO**: indexable, canonical `https://lead.etannacademy.com/`, geo meta, Open Graph/Twitter tags, `robots.txt`, `sitemap.xml`. JSON-LD (organisation, web page, 12 courses with fees, FAQ) is generated at build time in `src/seo.ts` from the same data as the page.
 - **GEO** (AI answer engines): `llms.txt` generated from the course, fee and FAQ data; AI crawlers allowed in `robots.txt`.
+
+## Enquiry form (native, posts to SPlus)
+
+The SPlus iframe has been replaced by the same two-step form built into the page (`src/components/EnquiryForm.tsx`, styles `.ca-*`).
+- It posts SPlus's own payload to `https://api.splus.one/web/v1/jobapplication/SaveLeadCourseForm` (override with `VITE_SPLUS_LEAD_API`) and treats `EmpStatus && Status && Data.result === 1` as success, exactly as the SPlus form does.
+- **SPlus must allow this site in CORS** (`Access-Control-Allow-Origin` for `https://lead.etannacademy.com`, and the Vercel URL if used). Until then the browser blocks the request and the form offers WhatsApp with the visitor's details filled in.
+- Course and country IDs are SPlus's (client 36), copied from the LeadCourseForm. Update `COURSES` / `COUNTRIES` if SPlus changes them.
+- The "Which describes you?" tiles pre-fill step 1. A hidden honeypot field drops bot submissions.
+- No API key is in the page. If SPlus requires one, put it in a server-side proxy, never in a `VITE_` variable (those are public).

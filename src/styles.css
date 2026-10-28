@@ -198,32 +198,11 @@ p{margin:0}
 .next b{display:block;color:#fff;font-size:16.5px}
 .f-alt{margin-top:22px}
 .f-alt .btn{min-height:50px;font-size:16px}
-.ff{position:relative;margin:22px calc(-1 * var(--gutter)) 0;overflow:hidden;height:calc(var(--fh) - var(--fcrop) - var(--fbot));transition:height .3s var(--ease)}
-/* --fbot hides the empty space below the form card until the visitor starts using the form; then .open
    gives back the full height (room for the course list, errors and step 2). */
-.ff.open{--fbot:0px}
-.ff iframe{display:block;width:100%;max-width:none;height:var(--fh);margin-top:calc(-1 * var(--fcrop));border:0;background:transparent;transform-origin:0 0}
-.ff.auto{height:auto}.ff.auto iframe{margin-top:0}
-.ff-ph{position:absolute;inset:0;display:grid;place-items:center;color:#93a9c6;font-size:15px;pointer-events:none;z-index:-1}
-.ff-nojs{position:absolute;top:180px;left:0;right:0;text-align:center;padding:0 24px;color:#fff}.ff-nojs a{color:#86efac}
-.ff-down{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:14px;padding:72px 24px 24px;text-align:center;background:linear-gradient(180deg,#0b1a6b,#000D63);color:#c9d3ff}
-.ff-down-ic{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;background:rgba(255,255,255,.1);color:#ffb4a8}
-.ff-down-ic .ico{width:28px;height:28px}
-.ff-down h3{color:#fff;font-size:22px}
-.ff-down p{max-width:380px;font-size:15.5px;line-height:1.55;margin-bottom:6px}
-.ff-down .btn{max-width:380px}
 .btn-glass-dark{background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.25)}
 a.btn-glass-dark:hover{color:#fff;background:rgba(255,255,255,.14)}
-.ff-down .ff-retry,.ff-down .ff-retry:hover,.ff-down .ff-retry:focus{color:#9fb4ff;background:none;font-size:15px;text-decoration:underline;text-underline-offset:3px}
 /* Heights measured from the SPlus form at each width: step 1 with the course list open, step 2 and
    error messages all fit with no inner scrolling. --fcrop trims empty space above its centred card. */
-.ff{--fh:1060px;--fcrop:120px;--fbot:176px}
-@media (min-width:375px){.ff{--fh:1022px;--fcrop:120px;--fbot:180px}}
-@media (min-width:412px){.ff{--fh:998px;--fcrop:116px}}
-@media (min-width:430px){.ff{--fh:980px;--fcrop:116px}}
-@media (min-width:600px){.ff{--fh:916px;--fcrop:96px;--fbot:172px;max-width:560px;margin:22px auto 0;border-radius:20px}}
-.f-privacy{font-size:13.5px;color:#93a9c6;text-align:center;padding:4px var(--gutter) 28px}
-.f-privacy a{color:#bfdbfe}
 
 /* Course catalogue */
 
@@ -579,8 +558,6 @@ a.ci:hover,a.ct-card:hover{color:inherit}
   .ts b{font-size:38px}
   .fsec{padding:96px 0 64px}
   .f-grid{display:grid;grid-template-columns:1fr 560px;gap:64px;align-items:start}
-  .ff{margin:-72px 0 0} /* pulls the form card level with the heading; only section padding sits above it */
-  .f-privacy{text-align:left;padding:14px 0 0}
   .fund-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:start}
   .schemes{margin-top:0;grid-template-columns:1fr 1fr}
   .scheme{flex-direction:column;align-items:flex-start;padding:24px}
@@ -679,3 +656,83 @@ h3{font-weight:700}
 .hero{padding-top:18px}
 @media (min-width:900px){.hero{padding-top:26px}}
 .rw{min-height:260px}
+
+/* Course enquiry form card: same design as the SPlus LeadCourseForm it replaces */
+.ca-card{position:relative;width:100%;max-width:560px;margin:28px auto 0;background:#fff;border-radius:24px;box-shadow:0 40px 90px -30px rgba(9,20,45,.7);padding:40px 40px 34px;color:#1e293b;font-family:'Plus Jakarta Sans',system-ui,sans-serif;scroll-margin-top:16px}
+.ca-card ::placeholder{color:#94a3b8}
+.ca-stepper{display:flex;align-items:center;gap:14px;margin-bottom:26px}
+.ca-step{display:flex;align-items:center;gap:9px;flex-shrink:0}
+.ca-badge{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;background:#e2e8f0;color:#94a3b8}
+.ca-badge.active{background:#1f3a6b;color:#fff}
+.ca-badge.done{background:#10b77f;color:#fff}
+.ca-step-label{font-size:15px;font-weight:700;color:#94a3b8}
+.ca-step-label.active{color:#1f3a6b}
+.ca-line{flex:1;height:2px;background:#e2e8f0;border-radius:2px}
+.ca-title{margin:0 0 8px;font-size:30px;font-weight:800;letter-spacing:-.02em;color:#12233f;line-height:1.15}
+.ca-sub{margin:0 0 28px;font-size:16px;line-height:1.5;color:#64748b}
+.ca-label{display:block;font-size:15px;font-weight:700;color:#1e293b;margin-bottom:12px}
+.ca-req{color:#e5484d}
+.ca-opts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+.ca-opt{display:flex;align-items:center;gap:11px;cursor:pointer;font-family:inherit;font-size:15.5px;font-weight:600;text-align:left;padding:17px 18px;border-radius:12px;transition:all .15s;background:#fff;border:1.5px solid #e2e8f0;color:#334155}
+.ca-opt.sel{border-color:#3b56e0;background:#eef2ff;color:#1e2fa8;box-shadow:0 0 0 3px rgba(59,86,224,.12)}
+.ca-radio{width:20px;height:20px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:2px solid #cbd5e1}
+.ca-opt.sel .ca-radio{border-color:#3b56e0}
+.ca-radio i{width:9px;height:9px;border-radius:50%;background:transparent}
+.ca-opt.sel .ca-radio i{background:#3b56e0}
+.ca-select-wrap{position:relative;margin-bottom:28px}
+.ca-select-arrow{position:absolute;right:18px;top:29px;transform:translateY(-50%);pointer-events:none;color:#475569;font-size:12px}
+.ca-contact{display:flex;gap:12px;align-items:stretch}
+.ca-country-select{position:relative;flex:0 0 150px}
+.ca-contact .ca-input{flex:1;min-width:0}
+.ca-input{width:100%;font-family:inherit;font-size:16px;color:#1e293b;padding:16px 18px;border-radius:12px;background:#f8fafc;outline:none;transition:all .15s;border:1.5px solid #e2e8f0}
+.ca-input:focus{border-color:#3b56e0;box-shadow:0 0 0 3px rgba(59,86,224,.12)}
+.ca-ss{position:relative}
+.ca-ss-trigger{width:100%;font-family:inherit;font-size:16px;color:#64748b;text-align:left;padding:17px 44px 17px 18px;border-radius:12px;background:#f8fafc;border:1.5px solid #e2e8f0;outline:none;cursor:pointer}
+.ca-ss-trigger.filled{color:#1e293b}
+.ca-ss.open .ca-ss-trigger,.ca-ss-trigger:focus-visible{border-color:#3b56e0;box-shadow:0 0 0 3px rgba(59,86,224,.12)}
+.ca-ss-text{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ca-ss-panel{position:absolute;top:calc(100% + 6px);left:0;z-index:40;min-width:100%;background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;box-shadow:0 18px 32px -14px rgba(15,23,42,.35);overflow:hidden}
+.ca-ss-search{padding:8px;border-bottom:1px solid #eef2f7}
+.ca-ss-search input{width:100%;font-family:inherit;font-size:16px;color:#1e293b;padding:9px 12px;border-radius:8px;background:#f8fafc;border:1.5px solid #e2e8f0;outline:none}
+.ca-ss-search input:focus{border-color:#3b56e0}
+.ca-ss-list{max-height:240px;overflow-y:auto;overscroll-behavior:contain;padding:5px}
+.ca-ss-opt{padding:10px 12px;border-radius:8px;font-size:14.5px;color:#1e293b;cursor:pointer;line-height:1.4}
+.ca-ss-opt.active{background:#eef2ff}
+.ca-ss-opt.selected{background:#3b56e0;color:#fff}
+.ca-ss-empty{padding:14px 12px;font-size:14px;color:#94a3b8;text-align:center}
+.ca-country-select .ca-ss-panel{min-width:230px}
+.ca-country-select .ca-ss-trigger{padding-left:16px;padding-right:34px}
+.ca-country-select .ca-select-arrow{right:14px}
+.ca-err{font-size:13.5px;color:#e5484d;font-weight:600}
+.ca-btn{display:block;width:100%;border:none;cursor:pointer;font-family:inherit;font-weight:700;border-radius:12px;transition:background .15s}
+.ca-btn:focus-visible,.ca-opt:focus-visible{outline:3px solid #3b56e0;outline-offset:3px}
+.ca-btn-primary{background:#3b56e0;color:#fff;font-size:17px;padding:18px;box-shadow:0 14px 26px -12px rgba(59,86,224,.7)}
+.ca-btn-primary:hover{background:#2f47d6}
+.ca-btn-navy{background:#1f3a6b;color:#fff;font-size:17px;padding:18px;margin-top:26px;box-shadow:0 14px 26px -12px rgba(31,58,107,.7)}
+.ca-btn-navy:hover{background:#16294d}
+.ca-btn-navy:disabled{opacity:.6;cursor:default}
+.ca-btn-back{background:#fff;color:#475569;font-size:16px;font-weight:600;padding:15px;margin-top:12px;border:1.5px solid #e2e8f0}
+.ca-btn-back:hover{background:#f8fafc}
+.ca-wa{margin-top:14px}
+.ca-note{margin:20px 0 0;text-align:center;font-size:13px;line-height:1.5;color:#94a3b8}
+.ca-note a{color:#5b6bdb;text-decoration:underline}
+.ca-success{text-align:center;padding:12px 0 6px}
+.ca-success-icon{width:66px;height:66px;border-radius:50%;background:#10b77f;color:#fff;font-size:32px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.ca-success h3{margin:0 0 10px;font-size:28px;font-weight:800;letter-spacing:-.02em;color:#12233f}
+.ca-success p{margin:0 auto;max-width:360px;font-size:16px;line-height:1.55;color:#64748b}
+.ca-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+@media (max-width:480px){
+  .ca-card{padding:30px 22px 26px;border-radius:20px}
+  .ca-title{font-size:26px}
+  .ca-opts{grid-template-columns:1fr}
+}
+@media (max-width:359px){
+  .ca-card{padding:26px 16px 22px}
+  .ca-country-select{flex-basis:118px}
+  .ca-step-label{font-size:13px}
+  .ca-stepper{gap:8px}
+  .ca-step{gap:6px}
+  .ca-line{display:none}
+  .ca-stepper{justify-content:space-between}
+}
+@media (min-width:900px){.ca-card{margin:0}}
