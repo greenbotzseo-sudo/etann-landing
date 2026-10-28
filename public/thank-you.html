@@ -20,7 +20,8 @@
    page a lead was submitted (generate_lead). Opened on its own, it simply shows the message above. */
 (function(){
   if (window.parent === window) return;
-  try { window.parent.postMessage({ source: 'etann-thank-you', type: 'form_success' }, location.origin); } catch (e) {}
+  try { var q = new URLSearchParams(location.search).get('situation');
+  window.parent.postMessage({ source: 'etann-thank-you', type: 'form_success', situation: q || undefined }, location.origin); } catch (e) {}
 })();
 </script>
 </body>

@@ -97,13 +97,23 @@ export function EnquiryForm() {
       }
     }, 0);
     let leadSent = false;
+    // generate_lead: situation from SPlus if it sends one, else from the "Which describes you?" tile the visitor picked.
+    const SITUATION = { so: 'obse', sso: 'prsf', new: 'new', sup: 'supervisor' } as const;
+    const lead = (course: string, sent?: unknown) => {
+      if (leadSent) return;
+      leadSent = true; setOpen(true);
+      const r = guideRef.current.role;
+      const situation = typeof sent === 'string' && /^(obse|prsf|new|supervisor|unsure)$/.test(sent) ? sent : r ? SITUATION[r] : 'unsure';
+      track('form_submission', { course, situation });
+      track('generate_lead', { course, situation, form: 'splus' });
+    };
     // Not sent by the SPlus form today — ready for when SPlus adds it (see README).
     const onMessage = (e: MessageEvent) => {
       if (e.source !== f.contentWindow) return;
       const m = e.data;
       // SPlus redirecting its iframe to /thank-you.html (same origin as this page) after a submit
       if (e.origin === location.origin && m?.source === 'etann-thank-you' && m.type === 'form_success') {
-        if (!leadSent) { leadSent = true; setOpen(true); track('form_submission', { course: '(thank-you page)' }); track('generate_lead', { course: '(thank-you page)', form: 'splus' }); }
+        lead('(thank-you page)', m.situation);
         return;
       }
       if (!CONFIG.splusOrigin.test(e.origin)) return;
@@ -113,7 +123,7 @@ export function EnquiryForm() {
         setOpen(true);
         const course = String(m.course || '').slice(0, 80);
         track(m.type, { course });
-        if (m.type === 'form_success' && !leadSent) { leadSent = true; track('form_submission', { course }); track('generate_lead', { course, form: 'splus' }); }
+        if (m.type === 'form_success') lead(course, m.situation);
       }
     };
     window.addEventListener('blur', onBlur);
